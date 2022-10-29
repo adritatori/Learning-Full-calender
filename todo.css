@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Rowdies&family=Titillium+Web&display=swap');
+
+.strike {
+  text-decoration: line-through;
+}
+
+td{
+  border: 1px solid black;
+  padding: 5px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.todo-input{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1rem;
+}
+
+#todoTable{
+  margin-top: 1rem;
+}
+
+::-ms-input-placeholder{
+  color: #909090;
+}
+
+::-webkit-input-placeholder{
+  color: #909090;
+}
+
+::placeholder{
+  color: #909090;
+}
+
+input {
+  color:#909090;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+h3 {
+  color:black;
+  font-family: 'Rowdies', cursive;
+}
+
+
+body{
+
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.todo-block{
+  border: 1px solid green;
+  padding: 1rem;
+  border-radius: 20px;
+  color: #555658;
+}
+
+@media screen and (max-width: 767px) {
+  /* for mobile or small screen device */
+  #todoTable, .todo-calendar{
+    margin-top: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  /* for tablets or laptops or desktops */
+  .todo-grid-parent{
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    column-gap: 1rem;
+  }
+
+  #calendar{
+    position: sticky;
+    top: 0;
+  }
+}
+
+.todo-overlay{
+  width: 100vw;
+  height: 100vh;
+  background-color: #ddd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-100vw);
+  transition: transform 250ms;
+  z-index: 2;
+}
+
+.todo-modal{
+  min-width: 50vw;
+ 
+  /*border: 1px solid green;*/
+  background-color: lightgreen;
+}
+.todo-modal button{
+  background-color: #ddd;
+}
+.todo-modal-close-btn{
+  background-color: green;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+}
+
+.slidedIntoView {
+  transform: translateX(0);
+  transition: transform 650ms;
+}
+
+
+#todoTable tr:nth-child(even) {
+  background-color: lightgreen;
+}
+
+button{
+  background-color: lightgreen;
+  color: #555658;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px outset #99ffaf;
+}
+
+button:active{
+  border: 1px inset #99ffaf;
+}
+
+button:hover{
+  background-color: #99ffaf;
+}
+
