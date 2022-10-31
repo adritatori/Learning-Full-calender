@@ -11,7 +11,12 @@
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.css">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.4.0/main.min.js"></script>
-  
+  <script src='https://fullcalendar.io/js/fullcalendar-3.4.0/lib/moment.min.js'></script>
+<script src='https://fullcalendar.io/js/fullcalendar-3.4.0/lib/jquery.min.js'></script>
+<script
+  src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+  integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+  crossorigin="anonymous"></script>
   <script src="index.js" defer></script>
 </head>
 
@@ -61,6 +66,8 @@
             <td></td>
             <td>Date</td>
             <td>Time</td>
+            <td>End Time</td>
+            <td>End Date</td>
             <td>to-do</td>
             <td>
               <select id="categoryFilter">
@@ -97,6 +104,10 @@
         <input type="date" id="todo-edit-date">
         <span>Time:</span>
         <input type="time" id="todo-edit-time">
+        <span>ETime:</span>
+        <input type="time" id="todo-edit-etime">
+        <span>Edate:</span>
+        <input type="date" id="todo-edit-edate">
         <span></span>
         <button id="changeBtn">Save Change</button>
       </div>

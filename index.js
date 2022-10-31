@@ -88,7 +88,7 @@ function todoMain() {
 
     let etimeValue = timeInpute.value;
    
-    timeInpute.value = " ";
+    timeInpute.value = "";
 
     let eDateValue = dateInpute.value;
   
@@ -100,7 +100,7 @@ function todoMain() {
       category: inputValue2,
       date: dateValue,
       time: timeValue,
-      edate:eDateValue,
+      edate: eDateValue,
       etime: etimeValue,
       done: false,
     };
@@ -172,7 +172,7 @@ function todoMain() {
     })
   }
 
-  function renderRow({ todo: inputValue, category: inputValue2, id, date, time, done }) {
+  function renderRow({ todo: inputValue, category: inputValue2, id, date, time,edate, etime, done }) {
     // add a new row
 
     let trElem = document.createElement("tr");
@@ -198,6 +198,16 @@ function todoMain() {
     let timeElem = document.createElement("td");
     timeElem.innerText = time;
     trElem.appendChild(timeElem);
+
+    // date cell
+    let edateElem = document.createElement("td");
+    dateElem.innerText = edate; //formatDate(date);
+    trElem.appendChild(edateElem);
+
+    // time cell
+    let etimeElem = document.createElement("td");
+    timeElem.innerText = etime;
+    trElem.appendChild(etimeElem);
 
     // to-do cell
     let tdElem2 = document.createElement("td");
@@ -246,9 +256,12 @@ function todoMain() {
     timeElem.dataset.type = "time";
     tdElem2.dataset.type = "todo";
     tdElem3.dataset.type = "category";
-
+    etimeElem.dataset.type ="time";
+    edateElem.dataset.type="date";
     dateElem.dataset.id = id;
     timeElem.dataset.id = id;
+     etimeElem.dataset.id = id;
+     edateElem.dataset.id =id;
     tdElem2.dataset.id = id;
     tdElem3.dataset.id = id;
 
@@ -335,8 +348,76 @@ function todoMain() {
         }
       },
       editable: true,
-      eventDrop: function (info) {
-        calendarEventDragged(info.event);
+      droppable: true, // this allows things to be dropped onto the calendar
+      eventDrop: function (info, delta) {
+        // calendarEventDragged(info.event);
+      
+          let id = info.event.id;
+          console.log("end"+ info.event.end);
+          let dateObj = new Date(info.event.start);
+          let edateObj = new Date(info.event.end);
+
+          console.log("dateobj "+ dateObj);
+          console.log("edateobj "+ edateObj);
+
+          let year = dateObj.getFullYear();
+          let month = dateObj.getMonth() + 1;
+          let date = dateObj.getDate();
+          let hour = dateObj.getHours();
+          let minute = dateObj.getMinutes();
+
+          let eyear = edateObj.getFullYear();
+          let emonth = edateObj.getMonth() + 1;
+          let edate = edateObj.getDate();
+          let ehour = edateObj.getHours();
+          let eminute = edateObj.getMinutes();
+
+
+
+
+          let paddedMonth = month.toString();
+          if (paddedMonth.length < 2) {
+            paddedMonth = "0" + paddedMonth;
+          }
+      
+          let paddedDate = date.toString();
+          if (paddedDate.length < 2) {
+            paddedDate = "0" + paddedDate;
+          }
+      
+          let toStoreDate = `${year}-${paddedMonth}-${paddedDate}`;
+          console.log("to storing date"+toStoreDate);
+
+
+
+          let epaddedMonth = emonth.toString();
+          if (epaddedMonth.length < 2) {
+            epaddedMonth = "0" + epaddedMonth;
+          }
+      
+          let epaddedDate = edate.toString();
+          if (epaddedDate.length < 2) {
+            epaddedDate = "0" + epaddedDate;
+          }
+      
+          let etoStoreDate = `${eyear}-${epaddedMonth}-${epaddedDate}`;
+          console.log("End to storing date"+etoStoreDate);
+
+          
+      
+          todoList.forEach(todoObj => {
+            if (todoObj.id == id) {
+              todoObj.date = toStoreDate;
+              todoObj.edate = etoStoreDate;
+              if(hour !== 0)
+                todoObj.time = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                todoObj.etime = `${ehour.toString().padStart(2, "0")}:${eminute.toString().padStart(2, "0")}`;
+            }
+          });
+      
+         save();
+      
+          multipleFilter();
       },
       eventTimeFormat: {
         hour: 'numeric',
@@ -513,6 +594,8 @@ function todoMain() {
     let category = document.getElementById("todo-edit-category").value;
     let date = document.getElementById("todo-edit-date").value;
     let time = document.getElementById("todo-edit-time").value;
+     let edate = document.getElementById("todo-edit-edate").value;
+    let etime = document.getElementById("todo-edit-etime").value;
 
     // remove from calendar
     calendar.getEventById(id).remove();
@@ -525,6 +608,8 @@ function todoMain() {
           category: category,
           date: date,
           time: time,
+          edate:edate,
+          etime:etime,
           done: false,
         };
 
@@ -540,20 +625,26 @@ function todoMain() {
     let tdNodeList = todoTable.querySelectorAll(`td[data-id='${id}']`);
     for (let i = 0; i < tdNodeList.length; i++) {
       //if(tdNodeList[i].dataset.id == id){
-      let type = tdNodeList[i].dataset.type;
-      switch (type) {
-        case "date":
+      let id = tdNodeList[i].dataset.id;
+      switch (id) {
+        case "todo-edit-date":
           tdNodeList[i].innerText = formatDate(date);
           break;
-        case "time":
+        case "todo-edit-time":
           tdNodeList[i].innerText = time;
           break;
-        case "todo":
+        case "todo-edit-todo":
           tdNodeList[i].innerText = todo;
           break;
-        case "category":
+        case "todo-edit-category":
           tdNodeList[i].innerText = category;
           break;
+        case "todo-edit-etime":
+          tdNodeList[i].innerText = etime;
+          break; 
+        case "todo-edit-edate":
+          tdNodeList[i].innerText = formatDate(edate);
+          break;   
       }
       //}
     }
@@ -574,13 +665,14 @@ function todoMain() {
 
   function preFillEditForm(id) {
     let result = todoList.find(todoObj => todoObj.id == id);
-    let { todo, category, date, time } = result;
+    let { todo, category, date, time ,edate, etime} = result;
 
     document.getElementById("todo-edit-todo").value = todo;
     document.getElementById("todo-edit-category").value = category;
     document.getElementById("todo-edit-date").value = date;
     document.getElementById("todo-edit-time").value = time;
-
+    document.getElementById("todo-edit-edate").value = edate;
+    document.getElementById("todo-edit-etime").value = etime;
     changeBtn.dataset.id = id;
   }
 
@@ -645,7 +737,7 @@ function todoMain() {
     let id = event.id;
 
     let dateObj = new Date(event.start);
-
+    console.log("dateobj "+ dateObj)
     let year = dateObj.getFullYear();
     let month = dateObj.getMonth() + 1;
     let date = dateObj.getDate();
